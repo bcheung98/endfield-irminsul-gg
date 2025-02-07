@@ -4,7 +4,7 @@ import { Character } from "types/character";
 export type LoadingStatus = "idle" | "pending" | "success" | "error";
 
 // https://api.irminsul.gg/endfield/characters.json
-const charactersURL = "https://api.irminsul.gg/endfield/characters.json";
+const charactersURL = "https://api.irminsul.gg/endfield/characters-beta.json";
 
 // https://api.irminsul.gg/endfield/weapons.json
 // const weaponsURL = "https://api.irminsul.gg/endfield/weapons.json";
