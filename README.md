@@ -1,4 +1,4 @@
-# <img src="https://assets.irminsul.gg/main/icons/Endfield.png" alt="Irminsul.GG" width="64" /> **[Arknights: Endfield - Irminsul.GG (WIP)](https://zzz.irminsul.gg/)**
+# <img src="https://assets.irminsul.gg/main/icons/Endfield.png" alt="Irminsul.GG" width="64" /> **[Arknights: Endfield - Irminsul.GG](https://endfield.irminsul.gg/)**
 
 The Arknights: Endfield branch of **[Irminsul.GG](https://irminsul.gg/)** - a database and companion website for various gacha games.
 
