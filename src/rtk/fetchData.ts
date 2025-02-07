@@ -4,10 +4,10 @@ import { Character } from "types/character";
 export type LoadingStatus = "idle" | "pending" | "success" | "error";
 
 // https://api.irminsul.gg/endfield/characters.json
-const charactersURL = "http://localhost:3000/characters";
+const charactersURL = "https://api.irminsul.gg/endfield/characters.json";
 
 // https://api.irminsul.gg/endfield/weapons.json
-// const weaponsURL = "https://api.irminsul.gg/endfield/weapons-v2.json";
+// const weaponsURL = "https://api.irminsul.gg/endfield/weapons.json";
 
 // const characterBannerURL =
 //     "https://api.irminsul.gg/endfield/character-banners.json";
