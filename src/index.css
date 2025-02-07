@@ -12,11 +12,6 @@ code {
         monospace;
 }
 
-@font-face {
-    font-family: Genshin;
-    src: url("./fonts/ja-jp.ttf");
-}
-
 ul {
     margin: 0;
     padding-left: 18px;
