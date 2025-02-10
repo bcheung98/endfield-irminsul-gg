@@ -10,6 +10,7 @@ import CharacterPassives from "./CharacterPassives";
 import CharacterPotential from "./CharacterPotential";
 import BetaTag from "custom/BetaTag";
 import PageNotFound from "components/PageNotFound";
+import SEO from "components/SEO";
 
 // MUI imports
 import { useTheme, useMediaQuery, Stack } from "@mui/material";
@@ -29,21 +30,6 @@ function CharacterPage() {
     );
 
     if (character !== undefined) {
-        const documentTitle = `${character.fullName} ${
-            import.meta.env.VITE_DOCUMENT_TITLE
-        }`;
-        const documentDesc = `${character.fullName} - ${character.rarity}★ ${character.element} ${character.weapon}`;
-        document.title = documentTitle;
-        document
-            .querySelector('meta[property="og:title"]')
-            ?.setAttribute("content", documentTitle);
-        document
-            .querySelector('meta[property="description"]')
-            ?.setAttribute("content", documentDesc);
-        document
-            .querySelector('meta[property="og:description"]')
-            ?.setAttribute("content", documentDesc);
-
         const betaTag = <BetaTag version={character.release.version} />;
 
         const charSplash = <CharacterImage character={character} />;
@@ -52,36 +38,42 @@ function CharacterPage() {
         const stats = <CharacterStats character={character} />;
 
         return (
-            <Stack spacing={2}>
-                {matches_md_up ? (
-                    <Grid container spacing={3}>
-                        <Grid size={4}>
-                            <Stack spacing={2}>
-                                {charSplash}
-                                {infoMisc}
-                            </Stack>
+            <>
+                <SEO
+                    title={character.fullName}
+                    description={character.description}
+                />
+                <Stack spacing={2}>
+                    {matches_md_up ? (
+                        <Grid container spacing={3}>
+                            <Grid size={4}>
+                                <Stack spacing={2}>
+                                    {charSplash}
+                                    {infoMisc}
+                                </Stack>
+                            </Grid>
+                            <Grid size="grow">
+                                <Stack spacing={2}>
+                                    {betaTag}
+                                    {infoMain}
+                                    {stats}
+                                </Stack>
+                            </Grid>
                         </Grid>
-                        <Grid size="grow">
-                            <Stack spacing={2}>
-                                {betaTag}
-                                {infoMain}
-                                {stats}
-                            </Stack>
-                        </Grid>
-                    </Grid>
-                ) : (
-                    <>
-                        {betaTag}
-                        {infoMain}
-                        {charSplash}
-                        {stats}
-                        {infoMisc}
-                    </>
-                )}
-                <CharacterSkills character={character} />
-                <CharacterPassives character={character} />
-                <CharacterPotential character={character} />
-            </Stack>
+                    ) : (
+                        <>
+                            {betaTag}
+                            {infoMain}
+                            {charSplash}
+                            {stats}
+                            {infoMisc}
+                        </>
+                    )}
+                    <CharacterSkills character={character} />
+                    <CharacterPassives character={character} />
+                    <CharacterPotential character={character} />
+                </Stack>
+            </>
         );
     } else {
         return <PageNotFound />;

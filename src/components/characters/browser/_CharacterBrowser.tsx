@@ -8,6 +8,7 @@ import ToggleButtons, { CustomToggleButtonProps } from "custom/ToggleButtons";
 import SearchBar from "custom/SearchBar";
 import ActionFab from "custom/ActionFab";
 import { TextStyled } from "styled/StyledTypography";
+import SEO from "components/SEO";
 
 // MUI imports
 import { useTheme, useMediaQuery, Button, Drawer } from "@mui/material";
@@ -29,19 +30,6 @@ import {
 import { isRightDrawerOpen, toggleRightDrawer } from "reducers/layout";
 
 function CharacterBrowser() {
-    const documentTitle = `Operators ${import.meta.env.VITE_DOCUMENT_TITLE}`;
-    const documentDesc = `A list of all Arknights: Endfield Operators`;
-    document.title = documentTitle;
-    document
-        .querySelector('meta[property="og:title"]')
-        ?.setAttribute("content", documentTitle);
-    document
-        .querySelector('meta[property="description"]')
-        ?.setAttribute("content", documentDesc);
-    document
-        .querySelector('meta[property="og:description"]')
-        ?.setAttribute("content", documentDesc);
-
     const theme = useTheme();
     const matches_sm_up = useMediaQuery(theme.breakpoints.up("sm"));
     const matches_md_up = useMediaQuery(theme.breakpoints.up("md"));
@@ -107,6 +95,10 @@ function CharacterBrowser() {
 
     return (
         <>
+            <SEO
+                title="Operators"
+                description="A list of all Arknights: Endfield Operators"
+            />
             <Grid
                 container
                 rowSpacing={2}

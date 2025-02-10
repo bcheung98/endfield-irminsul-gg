@@ -6,11 +6,12 @@ import RightHandDrawer from "custom/RightHandDrawer";
 import Nav from "./nav/Nav";
 import NavBottom from "./nav/NavBottom";
 import { TextStyled } from "styled/StyledTypography";
+import SEO from "./SEO";
 
 // MUI imports
 import { useTheme, Box, Paper } from "@mui/material";
 
-// Helper
+// Helper imports
 import { useAppSelector } from "helpers/hooks";
 import { selectWidth } from "reducers/settings";
 
@@ -26,6 +27,7 @@ function Layout() {
 
     return (
         <>
+            <SEO />
             <Box id="back-to-top-anchor" />
             <Box sx={{ display: "flex" }}>
                 <Nav />

@@ -8,19 +8,6 @@ import { Text, TextStyled } from "styled/StyledTypography";
 import { useTheme, Stack, Button, getContrastRatio } from "@mui/material";
 
 function PageNotFound() {
-    const documentTitle = `Arknights: Endfield - Irminsul.GG`;
-    const documentDesc = `The Arknights: Endfield branch of Irminsul.GG - a database and companion website for various gacha games.`;
-    document.title = documentTitle;
-    document
-        .querySelector('meta[property="og:title"]')
-        ?.setAttribute("content", documentTitle);
-    document
-        .querySelector('meta[property="description"]')
-        ?.setAttribute("content", documentDesc);
-    document
-        .querySelector('meta[property="og:description"]')
-        ?.setAttribute("content", documentDesc);
-
     const theme = useTheme();
 
     return (
