@@ -40,8 +40,10 @@ function CharacterPage() {
         return (
             <>
                 <SEO
+                    name={`${character.fullName} - ${character.rarity}★ ${character.opClass} | ${character.element} ${character.weapon}`}
                     title={character.fullName}
                     description={character.description}
+                    icon={`characters/icons/${character.name}`}
                 />
                 <Stack spacing={2}>
                     {matches_md_up ? (
