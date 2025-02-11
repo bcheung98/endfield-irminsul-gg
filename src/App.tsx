@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router";
 import "App.css";
 
@@ -29,14 +28,12 @@ function App() {
     }, [theme]);
 
     return (
-        <HelmetProvider>
-            <BrowserRouter>
-                <ThemeProvider theme={getTheme(theme)}>
-                    <CssBaseline />
-                    <RouteConfig />
-                </ThemeProvider>
-            </BrowserRouter>
-        </HelmetProvider>
+        <BrowserRouter>
+            <ThemeProvider theme={getTheme(theme)}>
+                <CssBaseline />
+                <RouteConfig />
+            </ThemeProvider>
+        </BrowserRouter>
     );
 }
 
