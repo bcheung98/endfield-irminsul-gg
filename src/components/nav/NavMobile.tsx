@@ -31,7 +31,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // Helper imports
 import { NavProps, navStyles } from "./Nav";
 
-function NavMobile({ navItems, linkItems }: NavProps) {
+function NavMobile({ navItems, linkItems, otherItems }: NavProps) {
     const theme = useTheme();
     const matches_up_sm = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -51,7 +51,7 @@ function NavMobile({ navItems, linkItems }: NavProps) {
         }
     };
 
-    const [dropdownOpen, setDropdownOpen] = useState(true);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggleDropdownState = () => {
         setDropdownOpen(!dropdownOpen);
     };
@@ -108,6 +108,7 @@ function NavMobile({ navItems, linkItems }: NavProps) {
                             p: 1,
                             maxHeight: "85vh",
                             overflowY: "auto",
+                            scrollbarWidth: "none",
                         }}
                     >
                         {navItems.map((item, index) => (
@@ -134,62 +135,105 @@ function NavMobile({ navItems, linkItems }: NavProps) {
                             </Box>
                         ))}
                         <Divider sx={{ my: "16px", mx: "8px" }} />
-                        <Box onClick={toggleDropdownState} sx={{ px: "16px" }}>
-                            <Stack
-                                direction="row"
-                                justifyContent="space-between"
+                        <Stack spacing={1}>
+                            <Box
+                                onClick={toggleDropdownState}
+                                sx={{ px: "16px" }}
                             >
-                                <TextStyled sx={{ color: theme.appbar.color }}>
-                                    Other Games
-                                </TextStyled>
-                                <IconButton
-                                    disableRipple
-                                    disableTouchRipple
-                                    sx={{
-                                        color: theme.appbar.color,
-                                        p: 0,
-                                    }}
-                                >
-                                    <ExpandMoreIcon
-                                        sx={{
-                                            color: theme.text.selected,
-                                            transform: dropdownOpen
-                                                ? "rotateZ(-180deg)"
-                                                : "rotateZ(0deg)",
-                                            transition: "transform 0.25s",
-                                        }}
-                                    />
-                                </IconButton>
-                            </Stack>
-                            <Collapse in={dropdownOpen} timeout="auto">
                                 <Stack
-                                    sx={{
-                                        mt: "16px",
-                                        borderLeft: `1px solid ${theme.border.color.primary}`,
-                                    }}
+                                    direction="row"
+                                    justifyContent="space-between"
                                 >
-                                    {linkItems.map((item, index) => (
-                                        <Box key={index} sx={{ px: "16px" }}>
-                                            <ButtonBase
-                                                href={item.link}
-                                                sx={styles.listItemButton()}
-                                            >
-                                                <Image
-                                                    src={item.icon}
-                                                    alt={item.text}
-                                                    style={styles.linkItem()}
-                                                />
-                                                <TextStyled
-                                                    sx={styles.listItemText()}
-                                                >
-                                                    {item.text}
-                                                </TextStyled>
-                                            </ButtonBase>
-                                        </Box>
-                                    ))}
+                                    <TextStyled
+                                        sx={{ color: theme.appbar.color }}
+                                    >
+                                        Games
+                                    </TextStyled>
+                                    <IconButton
+                                        disableRipple
+                                        disableTouchRipple
+                                        sx={{
+                                            color: theme.appbar.color,
+                                            p: 0,
+                                        }}
+                                    >
+                                        <ExpandMoreIcon
+                                            sx={{
+                                                color: theme.text.selected,
+                                                transform: dropdownOpen
+                                                    ? "rotateZ(-180deg)"
+                                                    : "rotateZ(0deg)",
+                                                transition: "transform 0.25s",
+                                            }}
+                                        />
+                                    </IconButton>
                                 </Stack>
-                            </Collapse>
-                        </Box>
+                                <Collapse in={dropdownOpen} timeout="auto">
+                                    <Stack
+                                        sx={{
+                                            mt: "8px",
+                                            borderLeft: `1px solid ${theme.border.color.primary}`,
+                                        }}
+                                    >
+                                        {linkItems.map((item, index) => (
+                                            <Box
+                                                key={index}
+                                                sx={{ px: "16px" }}
+                                            >
+                                                <ButtonBase
+                                                    href={item.link}
+                                                    sx={styles.listItemButton(
+                                                        import.meta.env
+                                                            .VITE_GAME_TAG ===
+                                                            item.tag
+                                                            ? location
+                                                            : "_"
+                                                    )}
+                                                >
+                                                    <Image
+                                                        src={item.icon}
+                                                        alt={item.text}
+                                                        style={styles.linkItem()}
+                                                    />
+                                                    <TextStyled
+                                                        sx={styles.listItemText(
+                                                            true,
+                                                            import.meta.env
+                                                                .VITE_GAME_TAG ===
+                                                                item.tag
+                                                                ? location
+                                                                : "_"
+                                                        )}
+                                                    >
+                                                        {item.text}
+                                                    </TextStyled>
+                                                </ButtonBase>
+                                            </Box>
+                                        ))}
+                                    </Stack>
+                                </Collapse>
+                            </Box>
+                            <Stack spacing={1} sx={{ px: "8px" }}>
+                                {otherItems.map((item, index) => (
+                                    <Box
+                                        key={index}
+                                        sx={styles.listItem(item.link)}
+                                    >
+                                        <RouterLink
+                                            key={index}
+                                            to={item.link}
+                                            openInNewTab
+                                        >
+                                            <TextStyled
+                                                sx={{ color: "inherit" }}
+                                            >
+                                                {item.text}
+                                            </TextStyled>
+                                        </RouterLink>
+                                    </Box>
+                                ))}
+                            </Stack>
+                        </Stack>
                         <Divider sx={{ mt: "16px", mx: "8px" }} />
                         <List>
                             <Box sx={styles.listItem("_")}>

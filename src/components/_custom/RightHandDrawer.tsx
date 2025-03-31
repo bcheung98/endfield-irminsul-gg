@@ -19,7 +19,7 @@ import {
 import { useAppDispatch, useAppSelector } from "helpers/hooks";
 import { isRightDrawerOpen, toggleRightDrawer } from "reducers/layout";
 
-const width = 320; // px
+const width = 360; // px
 
 function RightHandDrawer() {
     const theme = useTheme();

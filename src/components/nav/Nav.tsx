@@ -4,15 +4,22 @@ import { CSSProperties, useEffect, useState } from "react";
 import NavDesktop from "./NavDesktop";
 import NavMobile from "./NavMobile";
 
+// Helper imports
+import { NavItem, navItems, otherItems } from "./NavItems";
+
 // MUI imports
 import { useTheme, useMediaQuery, Theme, SxProps } from "@mui/material";
-
-const CURRENTGAME = "Endfield";
 
 export interface Website {
     title: string;
     tag: string;
     enabled: boolean;
+}
+
+export interface NavProps {
+    navItems: NavItem[];
+    linkItems: NavItem[];
+    otherItems: NavItem[];
 }
 
 function Nav() {
@@ -30,54 +37,44 @@ function Nav() {
     }, []);
 
     let linkItems: NavItem[] = [];
+
     websites.forEach(
         (site) =>
-            site.tag !== CURRENTGAME &&
             site.enabled &&
             linkItems.push({
                 icon: `https://assets.irminsul.gg/main/game-icons/${site.tag}.png`,
                 text: site.title,
                 link: `https://${site.tag.toLowerCase()}.irminsul.gg/`,
+                tag: site.tag,
             })
     );
     linkItems = linkItems.sort((a, b) => a.text.localeCompare(b.text));
 
+    if (linkItems.length > 0) {
+        const index = linkItems.findIndex(
+            (site) => site.tag === import.meta.env.VITE_GAME_TAG
+        );
+        linkItems.unshift(linkItems.splice(index, 1)[0]);
+    }
+
+    const items = {
+        navItems: navItems,
+        linkItems: linkItems,
+        otherItems: otherItems,
+    };
+
     return (
         <>
             {matches_up_md ? (
-                <NavDesktop navItems={navItems} linkItems={linkItems} />
+                <NavDesktop {...items} />
             ) : (
-                <NavMobile navItems={navItems} linkItems={linkItems} />
+                <NavMobile {...items} />
             )}
         </>
     );
 }
 
 export default Nav;
-
-export interface NavProps {
-    navItems: NavItem[];
-    linkItems: NavItem[];
-}
-
-export interface NavItem {
-    icon: string;
-    text: string;
-    link: string;
-}
-
-const navItems: NavItem[] = [
-    {
-        icon: "icons/Endfield",
-        text: "Home",
-        link: "/",
-    },
-    {
-        icon: "icons/Character",
-        text: "Operators",
-        link: "/operators/",
-    },
-];
 
 export const navStyles = (location: string) => ({
     navItem: (size = 32): CSSProperties => ({
@@ -137,5 +134,35 @@ export const navStyles = (location: string) => ({
             display: open ? "block" : "none",
             ml: "20px",
             color: link === location ? theme.text.selected : theme.appbar.color,
+            textShadow:
+                link === location
+                    ? `${theme.text.selected} 1px 1px 16px`
+                    : "none",
         }),
+    navBarItem: (): SxProps<Theme> => (theme) => ({
+        color: theme.appbar.color,
+        transition: "color 0.25s",
+        "&:hover": {
+            color: theme.text.selected,
+            textShadow: ` ${theme.text.selected} 1px 1px 8px`,
+        },
+    }),
+    menuItem: (): SxProps<Theme> => (theme) => ({
+        "&.MuiMenuItem-root": {
+            color: theme.text.primary,
+            "&:hover": {
+                backgroundColor: theme.menu.hover,
+                color: theme.text.selected,
+                textShadow: `${theme.text.selected} 1px 1px 16px`,
+            },
+            "&.Mui-focusVisible, &.Mui-selected": {
+                backgroundColor: theme.menu.hover,
+                color: theme.text.selected,
+                textShadow: `${theme.text.selected} 1px 1px 16px`,
+                "&:hover": {
+                    backgroundColor: theme.menu.hover,
+                },
+            },
+        },
+    }),
 });

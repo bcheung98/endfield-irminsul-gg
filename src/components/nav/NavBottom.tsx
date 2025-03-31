@@ -57,7 +57,7 @@ function NavBottom() {
         <AppBar
             position="relative"
             elevation={0}
-            sx={{ backgroundColor: theme.background(0), borderWidth: 0 }}
+            sx={{ backgroundColor: "transparent", borderWidth: 0 }}
         >
             <Toolbar
                 sx={{

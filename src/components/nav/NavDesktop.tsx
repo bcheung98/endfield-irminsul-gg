@@ -29,14 +29,15 @@ import {
     ButtonBase,
     List,
     Divider,
-    Collapse,
+    Menu,
+    MenuItem,
     Fade,
 } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import ExpandMore from "@mui/icons-material/ExpandMore";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 // Helper imports
 import { NavProps, navStyles } from "./Nav";
@@ -44,7 +45,7 @@ import { NavProps, navStyles } from "./Nav";
 const drawerWidth = 240; // px
 const iconSize = 32; // px
 
-function NavDesktop({ navItems, linkItems }: NavProps) {
+function NavDesktop({ navItems, linkItems, otherItems }: NavProps) {
     const theme = useTheme();
     const matches_lg_up = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -56,9 +57,13 @@ function NavDesktop({ navItems, linkItems }: NavProps) {
         setDrawerOpen(!drawerOpen);
     };
 
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggleDropdownState = () => {
-        setDropdownOpen(!dropdownOpen);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
     };
 
     const menuButtonStyle: SxProps = {
@@ -81,6 +86,17 @@ function NavDesktop({ navItems, linkItems }: NavProps) {
         transition: "transform 0.25s",
     };
 
+    const scrollTopStyle: SxProps = {
+        width: { xs: "32px", lg: "auto" },
+        height: "32px",
+        borderRadius: "4px",
+        backgroundColor: theme.palette.info.dark,
+        color:
+            getContrastRatio(theme.palette.info.dark, theme.text.primary) > 4.5
+                ? theme.text.primary
+                : theme.text.contrast,
+    };
+
     return (
         <>
             <AppBar
@@ -97,42 +113,134 @@ function NavDesktop({ navItems, linkItems }: NavProps) {
                         justifyContent: "space-between",
                     }}
                 >
-                    <FlexBox>
-                        <Box sx={{ width: "64px", px: "14px" }}>
-                            <IconButton
-                                onClick={toggleDrawerState}
+                    <FlexBox columnGap={matches_lg_up ? "48px" : "16px"}>
+                        <FlexBox>
+                            <Box sx={{ width: "64px", px: "14px" }}>
+                                <IconButton
+                                    onClick={toggleDrawerState}
+                                    disableRipple
+                                    disableTouchRipple
+                                    sx={menuButtonStyle}
+                                >
+                                    <MenuOpenIcon sx={menuIconStyle} />
+                                </IconButton>
+                            </Box>
+                            <Logo href="https://irminsul.gg/" />
+                        </FlexBox>
+                        <FlexBox columnGap={matches_lg_up ? "8px" : "4px"}>
+                            <Button
                                 disableRipple
                                 disableTouchRipple
-                                sx={menuButtonStyle}
+                                onClick={handleMenuOpen}
+                                variant="text"
+                                sx={styles.navBarItem()}
+                                endIcon={
+                                    <KeyboardArrowDownIcon
+                                        sx={{
+                                            transform: open
+                                                ? "rotateZ(-180deg)"
+                                                : "rotateZ(0deg)",
+                                            transition: "transform 0.25s",
+                                        }}
+                                    />
+                                }
                             >
-                                <MenuOpenIcon sx={menuIconStyle} />
-                            </IconButton>
-                        </Box>
-                        <Logo
-                            href={
-                                location === "/" ? "https://irminsul.gg/" : "/"
-                            }
-                        />
-                    </FlexBox>
-                    <FlexBox columnGap="32px">
-                        <ScrollTopDesktop>
-                            <Button
-                                variant="contained"
-                                startIcon={<KeyboardArrowUpIcon />}
+                                <TextStyled
+                                    variant="subtitle1-styled"
+                                    sx={{ color: "inherit" }}
+                                >
+                                    Games
+                                </TextStyled>
+                            </Button>
+                            <Menu
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleMenuClose}
                                 sx={{
-                                    height: "32px",
-                                    backgroundColor: theme.palette.info.dark,
-                                    color:
-                                        getContrastRatio(
-                                            theme.palette.info.dark,
-                                            theme.text.primary
-                                        ) > 4.5
-                                            ? theme.text.primary
-                                            : theme.text.contrast,
+                                    "& .MuiMenu-paper": {
+                                        border: `1px solid ${theme.appbar.hover}`,
+                                        borderRadius: "16px",
+                                    },
+                                    "& .MuiMenu-list": {
+                                        backgroundColor: theme.background(
+                                            2,
+                                            "light"
+                                        ),
+                                    },
                                 }}
                             >
-                                Back to Top
-                            </Button>
+                                {linkItems.map((item, index) => (
+                                    <MenuItem
+                                        key={index}
+                                        disableRipple
+                                        sx={styles.menuItem()}
+                                        selected={
+                                            import.meta.env.VITE_GAME_TAG ===
+                                            item.tag
+                                        }
+                                    >
+                                        <ButtonBase
+                                            href={item.link}
+                                            disableRipple
+                                            disableTouchRipple
+                                            sx={{ gap: "16px" }}
+                                        >
+                                            <Image
+                                                src={item.icon}
+                                                alt={item.text}
+                                                style={{
+                                                    width: "32px",
+                                                    borderRadius: "4px",
+                                                }}
+                                            />
+                                            <TextStyled
+                                                variant="subtitle1-styled"
+                                                sx={{ color: "inherit" }}
+                                            >
+                                                {item.text}
+                                            </TextStyled>
+                                        </ButtonBase>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                            {otherItems.map((item, index) => (
+                                <RouterLink
+                                    key={index}
+                                    to={item.link}
+                                    openInNewTab
+                                >
+                                    <Button
+                                        variant="text"
+                                        disableRipple
+                                        disableTouchRipple
+                                        sx={styles.navBarItem()}
+                                    >
+                                        <TextStyled
+                                            variant="subtitle1-styled"
+                                            sx={{ color: "inherit" }}
+                                        >
+                                            {item.text}
+                                        </TextStyled>
+                                    </Button>
+                                </RouterLink>
+                            ))}
+                        </FlexBox>
+                    </FlexBox>
+                    <FlexBox columnGap={matches_lg_up ? "32px" : "16px"}>
+                        <ScrollTopDesktop>
+                            {matches_lg_up ? (
+                                <Button
+                                    variant="contained"
+                                    startIcon={<KeyboardArrowUpIcon />}
+                                    sx={scrollTopStyle}
+                                >
+                                    Back to Top
+                                </Button>
+                            ) : (
+                                <IconButton sx={scrollTopStyle}>
+                                    <KeyboardArrowUpIcon />
+                                </IconButton>
+                            )}
                         </ScrollTopDesktop>
                         <Search />
                         <Settings />
@@ -181,61 +289,6 @@ function NavDesktop({ navItems, linkItems }: NavProps) {
                             </StyledTooltip>
                         </Box>
                     ))}
-                </List>
-                <Divider variant="middle" />
-                <List>
-                    <Box sx={styles.listItem("_")}>
-                        <StyledTooltip
-                            title={!drawerOpen ? "Other Games" : null}
-                            arrow
-                            placement="right"
-                        >
-                            <IconButton
-                                onClick={toggleDropdownState}
-                                disableRipple
-                                disableTouchRipple
-                                sx={styles.listItemButton()}
-                            >
-                                <ExpandMore
-                                    sx={styles.listIcon(dropdownOpen)}
-                                />
-                                <TextStyled
-                                    sx={styles.listItemText(drawerOpen)}
-                                >
-                                    Other Games
-                                </TextStyled>
-                            </IconButton>
-                        </StyledTooltip>
-                    </Box>
-                    <Collapse in={dropdownOpen} timeout="auto" unmountOnExit>
-                        {linkItems.map((item, index) => (
-                            <Box key={index} sx={styles.listItem(item.link)}>
-                                <StyledTooltip
-                                    title={!drawerOpen ? item.text : null}
-                                    arrow
-                                    placement="right"
-                                >
-                                    <ButtonBase
-                                        href={item.link}
-                                        disableRipple
-                                        disableTouchRipple
-                                        sx={styles.listItemButton()}
-                                    >
-                                        <Image
-                                            src={item.icon}
-                                            alt={item.text}
-                                            style={styles.linkItem()}
-                                        />
-                                        <TextStyled
-                                            sx={styles.listItemText(drawerOpen)}
-                                        >
-                                            {item.text}
-                                        </TextStyled>
-                                    </ButtonBase>
-                                </StyledTooltip>
-                            </Box>
-                        ))}
-                    </Collapse>
                 </List>
                 <Divider variant="middle" />
                 <List>

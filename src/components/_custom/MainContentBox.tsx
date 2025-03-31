@@ -2,7 +2,7 @@
 import { TextStyled } from "styled/StyledTypography";
 
 // MUI imports
-import { useTheme, Card, AppBar, Toolbar, Box } from "@mui/material";
+import { useTheme, alpha, Card, AppBar, Toolbar, Box } from "@mui/material";
 
 interface HeaderProps {
     dense?: boolean;
@@ -43,11 +43,14 @@ function MainContentBox({
     return (
         <Card
             sx={{
-                backgroundColor:
+                backgroundColor: alpha(
                     contentProps.backgroundColor ||
-                    theme.mainContentBox.backgroundColor,
+                        theme.mainContentBox.backgroundColor,
+                    0.95
+                ),
                 border: theme.mainContentBox.border,
                 borderRadius: theme.mainContentBox.borderRadius,
+                backdropFilter: "blur(4px)",
             }}
         >
             <AppBar position="static">
@@ -59,7 +62,7 @@ function MainContentBox({
                         flexGrow: 1,
                         flexWrap: "wrap",
                         justifyContent: "space-between",
-                        rowGap: "8px",
+                        gap: "8px",
                     }}
                 >
                     {typeof title === "string" ? (

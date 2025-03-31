@@ -433,7 +433,7 @@ function Search() {
                     sx={{
                         justifyContent: "space-between",
                         height: "32px",
-                        width: "240px",
+                        width: { xs: "200px", lg: "240px" },
                         border: `1px solid ${theme.border.color.primary}`,
                         backgroundColor: theme.menu.primary,
                         "&:hover": {
