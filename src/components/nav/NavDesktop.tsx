@@ -7,6 +7,7 @@ import Search from "components/Search";
 import Settings from "components/Settings";
 import Image from "custom/Image";
 import RouterLink from "./RouterLink";
+import DiscordPopup from "./DiscordPopup";
 import { FlexBox } from "styled/StyledBox";
 import { TextStyled } from "styled/StyledTypography";
 import { StyledTooltip } from "styled/StyledTooltip";
@@ -32,6 +33,7 @@ import {
     Menu,
     MenuItem,
     Fade,
+    Dialog,
 } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -55,6 +57,14 @@ function NavDesktop({ navItems, linkItems, otherItems }: NavProps) {
     const [drawerOpen, setDrawerOpen] = useState(matches_lg_up);
     const toggleDrawerState = () => {
         setDrawerOpen(!drawerOpen);
+    };
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
+    const handleDialogClose = () => {
+        setDialogOpen(false);
     };
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -156,6 +166,7 @@ function NavDesktop({ navItems, linkItems, otherItems }: NavProps) {
                                 anchorEl={anchorEl}
                                 open={open}
                                 onClose={handleMenuClose}
+                                disableScrollLock
                                 sx={{
                                     "& .MuiMenu-paper": {
                                         border: `1px solid ${theme.appbar.hover}`,
@@ -294,6 +305,32 @@ function NavDesktop({ navItems, linkItems, otherItems }: NavProps) {
                 <List>
                     <Box sx={styles.listItem("_")}>
                         <StyledTooltip
+                            title={!drawerOpen ? "Discord" : null}
+                            arrow
+                            placement="right"
+                        >
+                            <ButtonBase
+                                onClick={handleDialogOpen}
+                                disableRipple
+                                disableTouchRipple
+                                sx={styles.listItemButtonExtra("#115293")}
+                            >
+                                <Image
+                                    src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg"
+                                    alt="Discord"
+                                    style={styles.navItem()}
+                                />
+                                <TextStyled
+                                    sx={styles.listItemText(drawerOpen)}
+                                >
+                                    Discord
+                                </TextStyled>
+                            </ButtonBase>
+                        </StyledTooltip>
+                    </Box>
+                    <Box sx={{ my: "8px" }} />
+                    <Box sx={styles.listItem("_")}>
+                        <StyledTooltip
                             title={!drawerOpen ? "Buy me a Ko-Fi" : null}
                             arrow
                             placement="right"
@@ -304,7 +341,7 @@ function NavDesktop({ navItems, linkItems, otherItems }: NavProps) {
                                 rel="noopener"
                                 disableRipple
                                 disableTouchRipple
-                                sx={styles.listItemButton()}
+                                sx={styles.listItemButtonExtra("#1A6499")}
                             >
                                 <Image
                                     src="https://storage.ko-fi.com/cdn/brandasset/v2/kofi_symbol.png"
@@ -322,6 +359,15 @@ function NavDesktop({ navItems, linkItems, otherItems }: NavProps) {
                 </List>
                 <Toolbar />
             </Drawer>
+            <Dialog
+                open={dialogOpen}
+                onClose={handleDialogClose}
+                maxWidth="sm"
+                fullWidth
+                disableScrollLock
+            >
+                <DiscordPopup handleClose={handleDialogClose} />
+            </Dialog>
         </>
     );
 }

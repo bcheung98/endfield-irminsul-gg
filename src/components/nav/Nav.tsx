@@ -128,6 +128,17 @@ export const navStyles = (location: string) => ({
                 backgroundColor: theme.appbar.selectedHover,
             },
         }),
+    listItemButtonExtra:
+        (color = "", size = 32): SxProps<Theme> =>
+        (theme) => ({
+            borderRadius: "4px",
+            justifyContent: "left",
+            px: `${(size * 2) / 8}px`,
+            width: "100%",
+            height: `${size * 1.25}px`,
+            color: theme.appbar.color,
+            backgroundColor: color || "transparent",
+        }),
     listItemText:
         (open = true, link = ""): SxProps<Theme> =>
         (theme) => ({
